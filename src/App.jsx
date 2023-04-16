@@ -60,6 +60,37 @@ function App() {
     setNombreP(result1);
   }
 
+  const eliminarPerroAceptado = (index, acre) => {
+
+    if (acre === 0) {
+
+      setListadoA((rechazadoAnterior) => ({
+        link: [...rechazadoAnterior.link, rechazado.link[index]],
+        name: [...rechazadoAnterior.name, rechazado.name[index]]
+      }));
+
+      const nuevosPerrosAceptados = {
+        link: [...rechazado.link.slice(0, index), ...rechazado.link.slice(index + 1)],
+        name: [...rechazado.name.slice(0, index), ...rechazado.name.slice(index + 1)]
+      };
+      setListadoR(nuevosPerrosAceptados);
+    } else {
+
+      setListadoR((rechazadoAnterior) => ({
+        link: [...rechazadoAnterior.link, aceptado.link[index]],
+        name: [...rechazadoAnterior.name, aceptado.name[index]]
+      }));
+
+      const nuevosPerrosAceptados = {
+        link: [...aceptado.link.slice(0, index), ...aceptado.link.slice(index + 1)],
+        name: [...aceptado.name.slice(0, index), ...aceptado.name.slice(index + 1)]
+      };
+      setListadoA(nuevosPerrosAceptados);
+    }
+
+
+  };
+
 
   return (
     <Box sx={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -85,9 +116,9 @@ function App() {
                       className="card-media" //Aplicar la clase de estilo al componente
                       image={rechazado.link[index]}
                     />
-                    <h1>{aceptado.name[index]}</h1>
+                    <h4>{rechazado.name[index]}</h4>
                     <CardActions direction="row" spacing={2} ml={'25%'}>
-                      <Button variant="contained" color="success">Arrepentirse</Button>
+                      <Button variant="contained" color="success" onClick={() => eliminarPerroAceptado(index, 0)}>Arrepentirse</Button>
                     </CardActions>
                   </Stack>
                 </Card>
@@ -144,9 +175,9 @@ function App() {
                       className="card-media" //Aplicar la clase de estilo al componente
                       image={aceptado.link[index]}
                     />
-                    <h1>{aceptado.name[index]}  </h1>
+                    <h4>{aceptado.name[index]}  </h4>
                     <CardActions direction="row" spacing={2} ml={'25%'}>
-                      <Button variant="contained" color="success">Arrepentirse</Button>
+                      <Button variant="contained" color="success" onClick={() => eliminarPerroAceptado(index, 1)}>Arrepentirse</Button>
                     </CardActions>
 
                   </Stack>
@@ -164,11 +195,3 @@ function App() {
 }
 
 export default App
-
-
-  // < Grid container spacing = { 2} >
-  //       <Grid xs={4}>
-  //       </Grid>
-  //       <Grid xs={8}>
-  //       </Grid>
-  //     </Grid >
