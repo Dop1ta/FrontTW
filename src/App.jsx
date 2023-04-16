@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Grid, Box, Card, CardMedia, List, CardActions, Button, CardContent, Typography, Stack } from '@mui/material';
+import { useEffect, useState, useRef } from "react";
+import { Grid, Box, Card, CardMedia, List, CardActions, Button, CardContent, Typography, Stack, CircularProgress } from '@mui/material';
 import axios from "axios";
 
 function App() {
@@ -13,13 +13,17 @@ function App() {
   });
   const [imagenPerro, setImagenPerro] = useState(null);
   const [NombreP, setNombreP] = useState('');
-
+  const [bControl, setbControl] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const timer = useRef();
 
   const obtenerImagenPerro = () => {
     axios
       .get("https://dog.ceo/api/breeds/image/random")
       .then((response) => {
         setImagenPerro(response.data.message);
+        setbControl(true);
+        setLoading(false);
       });
   };
 
@@ -30,22 +34,39 @@ function App() {
 
   //ACEPTADO EN EL MATCH
   const aceptarP = (itemURL, itemName) => {
+
+    setbControl(false);
+
     setListadoA((rechazadoAnterior) => ({
       link: [...rechazadoAnterior.link, itemURL],
       name: [...rechazadoAnterior.name, itemName]
     }));
     obtenerImagenPerro();
     generateRandomString();
+    setLoading(true);
+    timer.current = window.setTimeout(() => {
+      setLoading(false);
+      setbControl(true);
+    }, 2000);
   };
 
   //RECHAZADO EN EL MATCH
   const rechazarP = (itemURL, itemName) => {
+
+    setbControl(false);
+
     setListadoR((rechazadoAnterior) => ({
       link: [...rechazadoAnterior.link, itemURL],
       name: [...rechazadoAnterior.name, itemName]
     }));
     obtenerImagenPerro();
     generateRandomString();
+    setLoading(true);
+    timer.current = window.setTimeout(() => {
+      setLoading(false);
+      setbControl(true);
+    }, 2000);
+
   };
 
 
@@ -140,6 +161,7 @@ function App() {
 
             <Card sx={{ maxWidth: 600 }}>
               <CardMedia
+                hidden={loading}
                 component="img"
                 className="card-media"
                 height={500}
@@ -147,13 +169,26 @@ function App() {
                 alt="Perro aleatorio"
               />
 
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    color: 'green',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                  }}
+                />
+              )}
 
             </Card>
             <CardActions direction="row" spacing={2} ml={'25%'}>
-              <Button variant="contained" color="success" onClick={() => aceptarP(imagenPerro, NombreP)}>
+              <Button variant="contained" disabled={bControl === false} color="success" onClick={() => aceptarP(imagenPerro, NombreP)}>
                 ACEPTAR
               </Button>
-              <Button variant="outlined" color="error" onClick={() => rechazarP(imagenPerro, NombreP)}>
+              <Button variant="outlined" disabled={bControl === false} color="error" onClick={() => rechazarP(imagenPerro, NombreP)}>
                 RECHAZAR
               </Button>
             </CardActions>
@@ -169,6 +204,7 @@ function App() {
                 <Card key={index}>
                   <Stack direction={"row"}>
                     <CardMedia
+
                       component="img"
                       height={100}
                       style={{ maxWidth: '30%' }}
