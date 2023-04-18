@@ -171,9 +171,9 @@ function App() {
 
               {loading && (
                 <CircularProgress
-                  size={24}
+                  size={60}
+                  color="error"
                   sx={{
-                    color: 'green',
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
