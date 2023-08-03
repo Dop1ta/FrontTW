@@ -19,6 +19,7 @@ import { mutateExample } from "../Queries/mutate";
 
 const Formulario = () => {
 
+
   //PEDIR IMAGEN DEL PERRO
   const {
     data: imagenPerro,
@@ -29,21 +30,21 @@ const Formulario = () => {
   } = useBuscarInfoQuery();
 
 
-
-
   const { handleSubmit,reset,control,formState: { errors }} = useForm({
     defaultValues: {
-      nombre: "",
+      name: "",
       sexo: "",
-      descripcion: "",
+      description: "",
       urlP: imagenPerro,
     },
   });
 
+
+
   const onSubmit = (data) => {
     console.log(data);
-
-    // mutate(data);
+    data.urlP = imagenPerro || "";
+    mutate(data);
   };
 
   // const guardarInfo = (data) => {
@@ -53,14 +54,14 @@ const Formulario = () => {
   // };
  
 
-  // const { mutate } = useMutation(mutateExample, {
-  //   onSuccess: (response) => {
-  //    console.log('estoy bien');
-  //   },
-  //   onError: (error) => {
-  //    console.log('me fui a la B');
-  //   },
-  // });
+  const { mutate } = useMutation(mutateExample, {
+    onSuccess: (response) => {
+     console.log('estoy bien');
+    },
+    onError: (error) => {
+     console.log('me fui a la B');
+    },
+  });
 
 
 
@@ -111,7 +112,7 @@ const Formulario = () => {
                 
                 <Grid item md={4}>
                     <InputField
-                        name="nombre"
+                        name="name"
                         label="Nombre"
                         control={control}
                         type="text"
@@ -123,7 +124,7 @@ const Formulario = () => {
                         control={control}
                     />
                     <InputField
-                        name="descripcion"
+                        name="description"
                         label="Descripcion"
                         control={control}
                         type="text"

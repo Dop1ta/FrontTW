@@ -6,6 +6,6 @@ export const mutateExample = async (form) => {
 
     const clienteAxios = axios.create({ baseURL: url });
 
-    const { data } = await clienteAxios.post('/perro/create/',form);
+    const { data } = await clienteAxios.post('/perro/create',form);
     return data;   
 }
