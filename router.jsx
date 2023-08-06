@@ -21,7 +21,7 @@ const LogedInRoutes = () => {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Inicio />} />
+        <Route exact path="/" element={<Formulario />} />
         <Route path="form" element={<Formulario/>} />
         <Route path="search/:dogID" element={<SearchDog/>} />
       </Routes>
